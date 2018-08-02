@@ -1,20 +1,35 @@
-# BitGenGo : Random Bit Generator 
+# BitGenGo : Pseudorandom Bit Generator 
 
-A simple random bit generator written in Go, based on single processor context switch
+A simple pseudorandom bit generator written in Go, based on processor context switch
 
 # Overview
 
 Randomness is hard to come by. Especially on deterministic machines like computers. Generally we settle for pseudorandomness, which closely resembles randomness, but actually isn't. 
-The main sources of pseudorandomness in a computer are memory and CPU. There are other methods of generating random numbers with a computer using human input, such as keystrokes, mouseclicks and mouse movements. But those methods require constant new input from a human user, to keep it really random.
+The main sources of pseudorandomness in a computer are memory and CPU. There are other methods of generating random numbers with a computer using human input, such as keystrokes, mouseclicks and mouse movements. But those methods require constant new input from a human user.
 The context switch of the CPU is a good candidate for a pseudorandom generator, since it is hard to predict when the context switch will actually occur.
 
 # How does it work?
 
 BitGenGo is actually a small program which spawns off two goroutines(threads) and they take turns setting a shared variable with a value(zero/one).
 Every time the user requests a bit, the current value of the shared variable is returned. Since a context switch takes a certain amount of time, the user must set a time threshold for retreiving a bit (default is 25 milliseconds). 
-This essentially means a user can request the next bit only after a threshold time has passed since the retrieval of the previous bit. This ensures the shared variable will switch values several times before the next request.
-It is recommended the user set his own threshold for security reasons (minimum of 20 milliseconds is best). 
-That way, if many bits are requested at once, they will be generated in unpredicted and large enough intervals. 
+This means a user can request the next bit only after the threshold time has passed since the retrieval of the previous bit. This ensures the shared variable will switch values several times before each request.
+It is recommended the user set his own threshold for security reasons (minimum of 20 milliseconds is advised). 
+That way, if many bits are requested at once, they will be generated in unknown and large enough intervals. 
+
+# Usage
+
+Get the code: ```go get github.com/maxamel/BitGenGo```
+
+Import it: ```github.com/maxamel/BitGenGo```
+
+Then you can start generating pseudorandom bits:
+
+```
+rnd := rand,Rand{IntervalInMillis: 23}
+rnd.Powerup()
+b := rnd.GetBit()
+rnd.Shutdown()
+```
 
 # Measurement
 
