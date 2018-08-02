@@ -3,7 +3,6 @@ package rand
 import (
 "sync"
 "time"
-//"fmt"
 )
 
 type Rand struct {
@@ -11,14 +10,14 @@ type Rand struct {
   lastcall int64
   bit int
   stop chan struct{}
-  interval int
+  IntervalInMillis int64
 }
 
 func (r *Rand) GetBit() (int) {
   a := time.Now().UnixNano() / int64(time.Millisecond)
   gap := a - r.lastcall
-  if (gap < 100) {
-    time.Sleep(time.Duration(100-gap) * time.Millisecond)
+  if (gap < r.IntervalInMillis) {
+    time.Sleep(time.Duration(r.IntervalInMillis-gap) * time.Millisecond)
   }
   r.lastcall = time.Now().UnixNano() / int64(time.Millisecond)
   return r.bit
@@ -39,7 +38,6 @@ func (r *Rand) randomize(bitwise int) {
   for {
     select {
       default:
-        //fmt.Println("BITWISE %d\n", bitwise)
         if r.bit != bitwise {
           r.mux.Lock()
           r.bit = bitwise

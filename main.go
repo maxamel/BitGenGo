@@ -4,7 +4,7 @@ import "fmt"
 import "gorand/rand"
 
 func main() {
-  rnd := rand.Rand{}
+  rnd := rand.Rand{IntervalInMillis : 10}
 
   rnd.Powerup()
   
