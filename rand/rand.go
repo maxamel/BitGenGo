@@ -5,36 +5,52 @@ import (
 "time"
 )
 
-type Rand struct {
+type Randomizer interface {
+  GetBit() int
+  Powerup()
+  Shutdown()
+}
+
+type randomizer struct {
   mux sync.Mutex
   lastcall int64
   bit int
   stop chan struct{}
-  IntervalInMillis int64
+  intervalInMillis int64
 }
 
-func (r *Rand) GetBit() (int) {
+// Minimum interval is 20
+func NewRandomizer(intervalInMillis int64) Randomizer{
+  r := randomizer{}
+  r.intervalInMillis = 20
+  if intervalInMillis > 19 {
+    r.intervalInMillis = intervalInMillis
+  }
+  return &r
+}
+
+func (r *randomizer) GetBit() (int) {
   a := time.Now().UnixNano() / int64(time.Millisecond)
   gap := a - r.lastcall
-  if (gap < r.IntervalInMillis) {
-    time.Sleep(time.Duration(r.IntervalInMillis-gap) * time.Millisecond)
+  if (gap < r.intervalInMillis) {
+    time.Sleep(time.Duration(r.intervalInMillis-gap) * time.Millisecond)
   }
   r.lastcall = time.Now().UnixNano() / int64(time.Millisecond)
   return r.bit
 }
 
-func (r *Rand) Powerup() {
+func (r *randomizer) Powerup() {
   r.stop = make(chan struct{})
   go r.randomize(0)
   go r.randomize(1)
   r.lastcall = time.Now().UnixNano() / int64(time.Millisecond)
 }
 
-func (r *Rand) Shutdown() {
+func (r *randomizer) Shutdown() {
   close(r.stop)
 }
 
-func (r *Rand) randomize(bitwise int) {
+func (r *randomizer) randomize(bitwise int) {
   for {
     select {
       default:
