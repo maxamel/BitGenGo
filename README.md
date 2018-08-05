@@ -29,7 +29,7 @@ Import it:
 Then you can start generating pseudorandom bits:
 
 ```
-rnd := rand,Rand{IntervalInMillis: 23}
+rnd := rand.NewRandomizer(23)
 rnd.Powerup()
 b := rnd.GetBit()
 rnd.Shutdown()
