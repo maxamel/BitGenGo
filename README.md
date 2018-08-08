@@ -29,9 +29,9 @@ Import it:
 Then you can start generating pseudorandom bits:
 
 ```
-rnd := rand.NewRandomizer(23)
+rnd, _ := rand.NewRandomizer(25)
 rnd.Powerup()
-b := rnd.GetBit()
+b, _ := rnd.GetBit()
 rnd.Shutdown()
 // b contains a pseudorandom bit
 ```
