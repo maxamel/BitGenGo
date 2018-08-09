@@ -23,16 +23,16 @@ func TestBasic(t * testing.T) {
   }
 }
 
-func Test100MeanVariance(t * testing.T) {
+func Test1000MeanVariance(t * testing.T) {
   rnd, _ := NewRandomizer(20)
   rnd.Powerup()
   sum := 0
-  for i:=1; i<100; i++ {
+  for i:=1; i<1000; i++ {
     b, _ := rnd.GetBit()
     sum = sum + b
   }
   rnd.Shutdown()
-  var mean float64 = float64(sum)/100
+  var mean float64 = float64(sum)/1000
   if mean < 0.45 || mean > 0.55 {
     t.Errorf("Error in variance of the bits")
   }
@@ -54,6 +54,14 @@ func TestDoubleShutdown(t * testing.T) {
   err := rnd.Shutdown()
   if err == nil {
     t.Fatalf("Double Shutdown should crash!")
+  }
+}
+
+func TestGetBitOfShutdownRandomizer(t * testing.T) {
+  rnd, _ := NewRandomizer(40)
+  _, err := rnd.GetBit()
+  if err == nil {
+    t.Fatalf("Getting bit from shutdown randomizer should crash!")
   }
 }
 

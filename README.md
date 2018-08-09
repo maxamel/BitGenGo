@@ -42,6 +42,12 @@ There is no bullet-proof way to measure the quality of randomness being produced
 One of them is the Linux utility dieharder (```apt-get install dieharder```), which conducts many statistical tests and determines how random the numbers really are. BitGenGo has been tested against dieharder, and compared to results of other generators. 
 For more information, read the Benchmark section. 
 
+# Limitations
+
+Because of the dependency on context switch we must wait for some time before outputting the next bit.
+This leads to a situation where a long sequence of bits is a time consuming operation. 
+A possible solution can be a preprocessing phase, where you fetch a lengthy sequence of bits (however long that takes), and store it for later use.  
+
 # Benchmark
 
 The program was run against a dieharder suite and compared to the results of running dieharder 
@@ -347,5 +353,9 @@ Preparing to run test 209.  ntuple = 0
         dab_monobit2|  12|  65000000|       1|0.88664311|  PASSED  
 ```
 
-As can be seen, both runs have only a small amount of weak tests. As the dieharder tests are statistical tests, it is quite normal for a good pseudorandom generator to produce a few weak results, and even fail a couple.
+As can be seen, BitGenGo has even less weak tests than random.org. As the dieharder tests are statistical tests, it is quite normal for a good pseudorandom generator to produce a few weak results, and even fail a couple.
 For more information regarding the significance of the results refer to the dieharder documentation (```man dieharder```). 
+
+# Disclaimer
+
+The purpose of this project is to explore the processor as a source of pseudorandomness. It is not supposed to be used in any production environments and should not be considered secure.
