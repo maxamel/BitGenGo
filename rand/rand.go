@@ -4,10 +4,15 @@ import (
 "sync"
 "time"
 "errors"
+"math"
+"strings"
+"fmt"
+"strconv"
 )
 
 type Randomizer interface {
   GetBit() (int, error)
+  GetInt(int, int) (int, error)
   Powerup() error
   Shutdown() error
 }
@@ -42,6 +47,35 @@ func (r *randomizer) GetBit() (int, error) {
   }
   r.lastcall = time.Now().UnixNano() / int64(time.Millisecond)
   return r.bit, nil
+}
+
+func (r *randomizer) GetInt(lowerBound int, upperBound int) (int, error) {
+  normalizedRange := upperBound - lowerBound
+  numBits := math.Ceil(math.Log2(float64(normalizedRange)))
+  a := make([]int, int(numBits))
+  b := false
+  ans := -1
+  for !b {
+  for i:=0; i<int(numBits); i++ {
+    bit, err := r.GetBit()
+    if err != nil {
+      return -1, err
+    }
+    a = append(a, bit)
+  }
+  s := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(a)), ""), "[]")
+  fmt.Println(s)
+  integer, err := strconv.ParseInt(s, 2, int(numBits+1))
+  if err != nil {
+    return -1, errors.New("Error in bit conversion to integer")
+  }
+  ans = int(integer) + lowerBound
+  fmt.Println(ans)
+  if ans < upperBound {
+    b = true
+  }
+  }
+  return ans, nil
 }
 
 func (r *randomizer) Powerup() error {

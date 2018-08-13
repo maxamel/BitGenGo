@@ -4,7 +4,7 @@ import (
   "testing"
 )
 
-func TestBasic(t * testing.T) {
+func TestBasicBit(t * testing.T) {
   rnd, err := NewRandomizer(50)
   if err != nil {
     t.Errorf("Failed to create a new Randomizer")
@@ -16,6 +16,25 @@ func TestBasic(t * testing.T) {
   _, err = rnd.GetBit()
   if err != nil {
     t.Errorf("Failed to get a bit from the Randomizer")
+  }
+  err = rnd.Shutdown()
+  if err != nil {
+    t.Errorf("Failed to shutdown the Randomizer")
+  }
+}
+
+func TestBasicInt(t * testing.T) {
+  rnd, err := NewRandomizer(50)
+  if err != nil {
+    t.Errorf("Failed to create a new Randomizer")
+  }
+  err = rnd.Powerup()
+  if err != nil {
+    t.Errorf("Failed to powerup the Randomizer")
+  }
+  _, err = rnd.GetInt(20, 100)
+  if err != nil {
+    t.Errorf("Failed to get an int from the Randomizer")
   }
   err = rnd.Shutdown()
   if err != nil {
