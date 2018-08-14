@@ -375,3 +375,7 @@ For more information regarding the significance of the results refer to the dieh
 # Disclaimer
 
 The purpose of this project is to explore the processor as a source of pseudorandomness. It is not supposed to be used in any production environments and should not be considered secure.
+
+# License
+
+Published under the MIT License. This basically means the software is free and anyone can use it however they wish. No liability or warranty.
