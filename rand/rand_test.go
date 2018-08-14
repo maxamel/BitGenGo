@@ -24,7 +24,7 @@ func TestBasicBit(t * testing.T) {
 }
 
 func TestBasicInt(t * testing.T) {
-  rnd, err := NewRandomizer(50)
+  rnd, err := NewRandomizer(44)
   if err != nil {
     t.Errorf("Failed to create a new Randomizer")
   }

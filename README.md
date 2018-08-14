@@ -14,7 +14,13 @@ BitGenGo is actually a small program which spawns off two goroutines(threads) an
 Every time the user requests a bit, the current value of the shared variable is returned. Since a context switch takes a certain amount of time, the user must set a time threshold for retreiving a bit (default is 25 milliseconds). 
 This means a user can request the next bit only after the threshold time has passed since the retrieval of the previous bit. This ensures the shared variable will switch values several times before each request.
 It is recommended the user set his own threshold for security reasons (minimum of 20 milliseconds is advised). 
-That way, if many bits are requested at once, they will be generated in unknown(to the attacker) and large enough intervals. 
+That way, if many bits are requested at once, they will be generated in unknown(to the attacker) and large enough intervals.
+
+# Random ints from random bits
+
+Generating random integers in a given range from random bits is not a trivial task. There are many ways to screw things up and create a biased distribution.
+In order to generate random integers, BitGenGo uses a technique called rejection sampling, where you draw a number from a uniform distribution and throw away the ones' that are out of the desired range. The probability of drawing a number within the range is at least 50%.
+This technique is detailed in an excellent blog post by Dmitri DeFigueirdo called ["Generating random integers from random bytes"](http://dimitri.xyz/random-ints-from-random-bits/).
 
 # Usage
 
@@ -34,6 +40,16 @@ rnd.Powerup()
 b, _ := rnd.GetBit()
 rnd.Shutdown()
 // b contains a pseudorandom bit
+```
+
+Generating random integers:
+
+```
+rnd, _ := rand.NewRandomizer(44)
+rnd.Powerup()
+b, _ := rnd.GetInt(10,100) 
+rnd.Shutdown()
+// b contains a pseudorandom integer in range 10<->100
 ```
 
 # Randomness Quality
