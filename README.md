@@ -44,7 +44,7 @@ rnd.Shutdown()
 // b contains a pseudorandom bit
 ```
 
-Genrating a bunch of pseudorandom bits:
+Generating a bunch of pseudorandom bits:
 
 ```
 rnd, _ := rand.NewRandomizer(22)
