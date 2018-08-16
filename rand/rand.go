@@ -13,6 +13,7 @@ import (
 // Randomizer is the interface of the randomizer object which creates pseudorandom bits
 type Randomizer interface {
 	GetBit() (int, error)
+	GetBits(int) ([]int, error)
 	GetInt(int, int) (int, error)
 	Powerup() error
 	Shutdown() error
@@ -28,8 +29,7 @@ type randomizer struct {
 	running          bool
 }
 
-// NewRandomizer creates a new Randomizer object
-// Minimum interval is 20
+// NewRandomizer creates a new Randomizer object. Minimum interval is 20
 func NewRandomizer(intervalInMillis int64) (Randomizer, error) {
 	if intervalInMillis < 20 {
 		return nil, errors.New("Minimum of 20 milliseconds interval is required")
@@ -53,6 +53,19 @@ func (r *randomizer) GetBit() (int, error) {
 	return r.bit, nil
 }
 
+// GetBits returns an amount of pseudorandom bits. As fetching a bit takes intervalInMillis time (see randomizer struct), the expected running time of this method is amount * intervalInMillis
+func (r *randomizer) GetBits(amount int) ([]int, error) {
+	a := make([]int, int(amount))
+	for i := 0; i < amount; i++ {
+		bit, err := r.GetBit()
+		if err != nil {
+			return nil, err
+		}
+		a = append(a, bit)
+	}
+	return a, nil
+}
+
 // GetInt returns a new pseudorandom integer
 func (r *randomizer) GetInt(lowerBound int, upperBound int) (int, error) {
 	normalizedRange := upperBound - lowerBound
@@ -60,13 +73,9 @@ func (r *randomizer) GetInt(lowerBound int, upperBound int) (int, error) {
 	b := false
 	ans := -1
 	for !b {
-		a := make([]int, int(numBits))
-		for i := 0; i < int(numBits); i++ {
-			bit, err := r.GetBit()
-			if err != nil {
-				return -1, err
-			}
-			a = append(a, bit)
+		a, err := r.GetBits(int(numBits))
+		if err != nil {
+			return -1, err
 		}
 		s := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(a)), ""), "[]")
 		integer, err := strconv.ParseInt(s, 2, int(numBits+1))
