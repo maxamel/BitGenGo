@@ -6,7 +6,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
-	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -21,9 +21,8 @@ type Randomizer interface {
 
 // randomizer is a the basic structure which creates random bits
 type randomizer struct {
-	mux              sync.Mutex
 	lastcall         int64
-	bit              int
+	bit              atomic.Value
 	stop             chan struct{}
 	intervalInMillis int64
 	running          bool
@@ -50,7 +49,7 @@ func (r *randomizer) GetBit() (int, error) {
 		time.Sleep(time.Duration(r.intervalInMillis-gap) * time.Millisecond)
 	}
 	r.lastcall = time.Now().UnixNano() / int64(time.Millisecond)
-	return r.bit, nil
+	return r.bit.Load().(int), nil
 }
 
 // GetBits returns an amount of pseudorandom bits. As fetching a bit takes intervalInMillis time (see randomizer struct), the expected running time of this method is amount * intervalInMillis
@@ -96,6 +95,7 @@ func (r *randomizer) Powerup() error {
 		return errors.New("Cannot power up a running Randomizer")
 	}
 	r.stop = make(chan struct{})
+	r.bit.Store(2)
 	go r.randomize(0)
 	go r.randomize(1)
 	r.lastcall = time.Now().UnixNano() / int64(time.Millisecond)
@@ -118,10 +118,8 @@ func (r *randomizer) randomize(bitwise int) {
 	for {
 		select {
 		default:
-			if r.bit != bitwise {
-				r.mux.Lock()
-				r.bit = bitwise
-				r.mux.Unlock()
+			if r.bit.Load().(int) != bitwise {
+				r.bit.Store(bitwise)
 			}
 		case <-r.stop:
 			return
