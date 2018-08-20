@@ -18,6 +18,13 @@ This means a user can request the next bit only after the threshold time has pas
 It is recommended the user set his own threshold for security reasons (minimum of 20 milliseconds is advised). 
 That way, if many bits are requested at once, they will be generated in unknown(to the attacker) and large enough intervals.
 
+# Lock on read/write
+
+Flipping the shared variable bit is predicated on acquiring a lock. This enforces a sequential flipping of the bit.
+However, when a user performs a bit read it does not require a lock. The reason is that we do not care about race conditions in this case, we only care about the unpredictability of the result. 
+Furthermore, introducing such a lock incurs a performance hit. You already have a minimal threshold time you have to wait between bit reads. Having to acquire a lock will only make things worse.
+For details refer to the [Benchmark Read/Write](# Benchmark Read/Write) section.
+
 # Random ints from random bits
 
 Generating random integers in a given range from random bits is not a trivial task. There are many ways to screw things up and create a biased distribution.
@@ -69,7 +76,7 @@ rnd.Shutdown()
 
 There is no bullet-proof way to measure the quality of randomness being produced from a generator. However, there are tools out there to provide an insight on how random is a sequence produced by such a generator.
 One of them is the Linux utility dieharder (```apt-get install dieharder```), which conducts many statistical tests and determines how random the numbers really are. BitGenGo has been tested against dieharder, and compared to results of other generators. 
-For more information, read the Benchmark section. 
+For more information, read the [Benchmark Randomness](# Benchmark Randomness) section. 
 
 # Limitations
 
@@ -77,7 +84,7 @@ Because of the dependency on context switch we must wait for some time before ou
 This leads to a situation where a long sequence of bits is a time consuming operation. 
 A possible solution can be a preprocessing phase, where you fetch a lengthy sequence of bits (however long that takes), and store it for later use.  
 
-# Benchmark
+# Benchmark Randomness
 
 The program was run against a dieharder suite and compared to the results of running dieharder against random bits from the regular ```crypto/rand``` golang library, 
 and against random bits generated from [random.org](https://www.random.org), which is supposed to be truely random (as the source of randomness is atmospheric noise).
@@ -536,6 +543,46 @@ Preparing to run test 209.  ntuple = 0
 
 As can be seen, BitGenGo has even less weak tests than random.org and ```crypto/rand``` of golang. As the dieharder tests are statistical tests, it is quite normal for a good pseudorandom generator to produce a few weak results, and even fail a couple.
 For more information regarding the significance of the results refer to the dieharder documentation (```man dieharder```). 
+
+# Benchmark Read/Write
+
+In order to test the performance hit of adding a lock on read, the program was run with and without such a lock and compared. 
+To reproduce the results you will need the program from the main branch (without lock) and the program from SyncReadBit branch (with lock).
+Simple program to measure the time between fetching bits (minimum threshold of 20 milliseconds):
+```
+func measureTime() {
+        rnd, _ := rand.NewRandomizer(20)
+        rnd.Powerup()
+        a := time.Now().UnixNano() / int64(time.Millisecond)
+        for i:=0; i<100; i++ {
+                rnd.GetBit()
+                b := time.Now().UnixNano() / int64(time.Millisecond)
+                fmt.Println(b-a)
+                a = b
+        }
+        rnd.Shutdown()
+}
+
+```
+
+Get minimum, maximum and average using awk:
+```
+awk '{if(min==""){min=max=$1}; if($1>max) {max=$1}; if($1<min) {min=$1}; total+=$1; count+=1} END {print total/count, max, min}'
+```
+
+Pipe the output from the time measuring program into the awk snippet and get the results.
+Results of five runs in each mode (time in milliseconds):
+```
+Without lock		With lock
+Avg   Max   Min		Avg   Max   Min
+28.43 45    20		34.43 53    20
+26.72 53    20		32.95 57    20
+26.89 45    20		33.24 60    20
+26.55 43    20          34.21 55    20
+27.72 50    20          33.18 56    20
+```
+
+As expected, the maximum and average time of fetching a bit is longer when having to acquire a lock.
 
 # Disclaimer
 
