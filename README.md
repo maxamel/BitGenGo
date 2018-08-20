@@ -23,7 +23,7 @@ That way, if many bits are requested at once, they will be generated in unknown(
 Flipping the shared variable bit is predicated on acquiring a lock. This enforces a sequential flipping of the bit.
 However, when a user performs a bit read it does not require a lock. The reason is that we do not care about race conditions in this case, we only care about the unpredictability of the result. 
 Furthermore, introducing such a lock incurs a performance hit. You already have a minimal threshold time you have to wait between bit reads. Having to acquire a lock will only make things worse.
-For details refer to the [Benchmark Read/Write](# Benchmark Read/Write) section.
+For details refer to the Benchmark Read/Write section.
 
 # Random ints from random bits
 
@@ -76,7 +76,7 @@ rnd.Shutdown()
 
 There is no bullet-proof way to measure the quality of randomness being produced from a generator. However, there are tools out there to provide an insight on how random is a sequence produced by such a generator.
 One of them is the Linux utility dieharder (```apt-get install dieharder```), which conducts many statistical tests and determines how random the numbers really are. BitGenGo has been tested against dieharder, and compared to results of other generators. 
-For more information, read the [Benchmark Randomness](# Benchmark Randomness) section. 
+For more information, read the Benchmark Randomness section. 
 
 # Limitations
 
