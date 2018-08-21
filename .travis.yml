@@ -4,7 +4,6 @@ go:
   - "1.9"
   - "1.10"
 script:
-  - go build
   - go test -coverprofile=coverage.txt -covermode=atomic
 
 after_success:
