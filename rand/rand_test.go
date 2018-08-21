@@ -33,8 +33,8 @@ func TestBasicBits(t *testing.T) {
 	if err != nil {
 		t.Errorf("Failed to powerup the Randomizer")
 	}
-	_, err = rnd.GetBits(20)
-	if err != nil {
+	bits, err := rnd.GetBits(30)
+	if err != nil || len(bits) != 30 {
 		t.Errorf("Failed to get bits from the Randomizer")
 	}
 	err = rnd.Shutdown()
@@ -64,6 +64,31 @@ func TestBasicInt(t *testing.T) {
 		t.Errorf("Failed to shutdown the Randomizer")
 	}
 }
+
+func TestBasicInts(t *testing.T) {
+        rnd, err := NewRandomizer(27)
+        if err != nil {
+                t.Errorf("Failed to create a new Randomizer")
+        }
+        err = rnd.Powerup()
+        if err != nil {
+                t.Errorf("Failed to powerup the Randomizer")
+        }
+        ints, err := rnd.GetInts(20, 20, 100)
+        if err != nil || len(ints) != 20{
+                t.Errorf("Failed to get ints from the Randomizer")
+        }
+	for _, num := range ints {
+        	if num > 100 || num < 20 {
+                	t.Errorf("Failed to maintain ints in the given range")
+        	}
+	}
+        err = rnd.Shutdown()
+        if err != nil {
+                t.Errorf("Failed to shutdown the Randomizer")
+        }
+}
+
 
 func TestEnforcedMinimumFrequency(t *testing.T) {
 	rnd, _ := NewRandomizer(50)
