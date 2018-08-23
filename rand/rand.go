@@ -66,6 +66,7 @@ func (r *randomizer) GetBits(amount int) ([]int, error) {
 	}
 	return a, nil
 }
+
 // GetInt returns a new pseudorandom integer in the range lowerBound<->upperBound. As fetching a bit takes intervalInMillis time (see randomizer struct), the expected running time of this method is intervalInMillis * log(upperBound-lowerBound) * 2
 func (r *randomizer) GetInt(lowerBound int, upperBound int) (int, error) {
 	normalizedRange := upperBound - lowerBound
@@ -89,19 +90,19 @@ func (r *randomizer) GetInt(lowerBound int, upperBound int) (int, error) {
 	}
 	return ans, nil
 }
-// GetInts returns an amount of pseudorandom integers in the range lowerBopund <-> upperBound. As fetching a bit takes intervalInMillis time (see randomizer struct), the expected running time of this method is intervalInMillis * log(upperBound-lowerBound) * 2 * amount 
-func (r *randomizer) GetInts(amount int, lowerBound int, upperBound int) ([]int, error) {
-        a := make([]int, int(amount))
-        for i := 0; i < amount; i++ {
-                num, err := r.GetInt(lowerBound, upperBound)
-                if err != nil {
-                        return nil, err
-                }
-                a[i] = num
-        }
-        return a, nil
-}
 
+// GetInts returns an amount of pseudorandom integers in the range lowerBopund <-> upperBound. As fetching a bit takes intervalInMillis time (see randomizer struct), the expected running time of this method is intervalInMillis * log(upperBound-lowerBound) * 2 * amount
+func (r *randomizer) GetInts(amount int, lowerBound int, upperBound int) ([]int, error) {
+	a := make([]int, int(amount))
+	for i := 0; i < amount; i++ {
+		num, err := r.GetInt(lowerBound, upperBound)
+		if err != nil {
+			return nil, err
+		}
+		a[i] = num
+	}
+	return a, nil
+}
 
 // Start the Randomizer
 func (r *randomizer) Powerup() error {

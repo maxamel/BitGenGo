@@ -3,7 +3,7 @@ version: '2'
 tasks:
   build:
     cmds:
-      - gofmt -s rand/rand.go
-      - gofmt -s rand/rand_test.go
-      - go build ./rand/ 
+      - go build ./rand/
+      - gofmt -s -w ./rand/rand.go
+      - gofmt -s -w ./rand/rand_test.go
       - go test ./rand/ -coverprofile=profile.out -covermode=atomic 
