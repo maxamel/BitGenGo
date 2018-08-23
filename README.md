@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/maxamel/BitGenGo.svg)](https://travis-ci.org/maxamel/BitGenGo)
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxamel/BitGenGo)](https://goreportcard.com/report/github.com/maxamel/BitGenGo)
 
 # BitGenGo : Pseudorandom Bit Generator 
@@ -23,7 +24,7 @@ That way, if many bits are requested at once, they will be generated in unknown(
 Flipping the shared variable bit is predicated on acquiring a lock. This enforces a sequential flipping of the bit.
 However, when a user performs a bit read it does not require a lock. The reason is that we do not care about race conditions in this case, we only care about the unpredictability of the result. 
 Furthermore, introducing such a lock incurs a performance hit. You already have a minimal threshold time you have to wait between bit reads. Having to acquire a lock will only make things worse.
-For details refer to the Benchmark Reads section.
+For this reason do not use ```-race``` flag when running tests. For details refer to the Benchmark Reads section.
 
 # Random ints from random bits
 

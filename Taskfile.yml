@@ -6,4 +6,4 @@ tasks:
       - gofmt -s rand/rand.go
       - gofmt -s rand/rand_test.go
       - go build ./rand/ 
-      - go test ./rand/
+      - go test ./rand/ -coverprofile=profile.out -covermode=atomic 
