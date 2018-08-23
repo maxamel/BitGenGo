@@ -1,0 +1,9 @@
+version: '2'
+
+tasks:
+  build:
+    cmds:
+      - gofmt -s rand/rand.go
+      - gofmt -s rand/rand_test.go
+      - go build ./rand/ 
+      - go test ./rand/
