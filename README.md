@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/maxamel/BitGenGo.svg)](https://travis-ci.org/maxamel/BitGenGo)
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxamel/BitGenGo)](https://goreportcard.com/report/github.com/maxamel/BitGenGo)
+[![codecov](https://codecov.io/gh/maxamel/BitGenGo/branch/master/graph/badge.svg)](https://codecov.io/gh/maxamel/BitGenGo)
 
 # BitGenGo : Pseudorandom Bit Generator 
 
