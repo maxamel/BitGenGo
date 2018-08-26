@@ -13,8 +13,7 @@ script:
   - ./bin/task build
 
 after_success:
-  - travis_wait 20 sudo dieharder -a -f ./rand/sample.txt > ./output.txt
-  - cat ./output.txt | grep WEAK | wc -l ; echo " WEAK TESTS "
+  - travis_wait 20 sudo dieharder -a -f ./rand/sample.txt
 
 after_script:
   - bash <(curl -s https://codecov.io./bash) -f ./coverage.txt
