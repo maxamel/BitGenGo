@@ -1,13 +1,21 @@
 language: go
+
 go:
   - "1.8"
   - "1.9"
   - "1.10"
+
 install:
   - curl -s https://raw.githubusercontent.com/go-task/task/master/install-task.sh | sh
+  - apt-get install -y dieharder
 
 script:
   - ./bin/task build
 
 after_success:
+  - dieharder -a -f ./rand/sample.txt > ./output.txt
+  - cat ./output.txt | grep WEAK | wc -l ; echo " WEAK TESTS "
+
+after_script:
   - bash <(curl -s https://codecov.io./bash) -f ./coverage.txt
+

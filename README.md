@@ -2,9 +2,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/maxamel/BitGenGo)](https://goreportcard.com/report/github.com/maxamel/BitGenGo)
 [![codecov](https://codecov.io/gh/maxamel/BitGenGo/branch/master/graph/badge.svg)](https://codecov.io/gh/maxamel/BitGenGo)
 
-# BitGenGo : Pseudorandom Bit Generator 
+# BitGenGo : Pseudorandom Generator 
 
-A simple pseudorandom bit generator written in Go, based on processor context switch
+A simple pseudorandom generator written in Go, based on processor context switch
 
 # Overview
 
@@ -15,8 +15,9 @@ The context switch of the CPU is a good candidate for a pseudorandom generator, 
 # How does it work?
 
 BitGenGo is a small program which spawns off two goroutines(threads) and they take turns setting a shared variable with a value(zero/one).
-Every time the user requests a bit, the current value of the shared variable is returned. Since a context switch takes a certain amount of time, the user must set a time threshold for retreiving a bit (default is 25 milliseconds). 
-This means a user can request the next bit only after the threshold time has passed since the retrieval of the previous bit. This ensures the shared variable will switch values several times before each request.
+Every time a bit is requested, the current value of the shared variable is returned. Since a context switch takes a certain amount of time, the user must set a time threshold for retreiving a bit (default is 25 milliseconds). 
+This means the next bit can be requested only after the threshold time has passed since the retrieval of the previous bit. This ensures the shared variable will switch values several times before each request.
+Using pseudorandom bits the user can generate integers and strings of arbitrary ranges and sizes. 
 It is recommended the user set his own threshold for security reasons (minimum of 20 milliseconds is advised). 
 That way, if many bits are requested at once, they will be generated in unknown(to the attacker) and large enough intervals.
 
@@ -84,6 +85,8 @@ rnd.Shutdown()
 // array contains 10 pseudorandom integers in range 10<->100
 ```
 
+If you want to mess with the code yourself, you need to install [Task](https://github.com/go-task/task) build tool.
+Use the command ```task build``` to build the code, format it and run tests.  
 
 # Randomness Quality
 

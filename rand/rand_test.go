@@ -1,6 +1,8 @@
 package rand
 
 import (
+	"fmt"
+	"os"
 	"testing"
 	"time"
 )
@@ -102,19 +104,19 @@ func TestEnforcedMinimumFrequency(t *testing.T) {
 	}
 }
 
-func Test1000MeanVariance(t *testing.T) {
+func TestPrint1000DieharderBits(t *testing.T) {
+	file, err := os.Create("./sample.txt")
+	if err != nil {
+		t.Errorf("Could not create file on OS")
+	}
+	defer file.Close()
 	rnd, _ := NewRandomizer(20)
 	rnd.Powerup()
-	sum := 0
 	for i := 1; i < 1000; i++ {
 		b, _ := rnd.GetBit()
-		sum = sum + b
+		file.WriteString(fmt.Sprintf("%d\n", b)) // writing...
 	}
 	rnd.Shutdown()
-	var mean float64 = float64(sum) / 1000
-	if mean < 0.45 || mean > 0.55 {
-		t.Errorf("Error in mean of the bits")
-	}
 }
 
 func TestDoublePowerup(t *testing.T) {
