@@ -13,7 +13,7 @@ script:
   - ./bin/task build
 
 after_success:
-  - sudo dieharder -a -f ./rand/sample.txt > ./output.txt
+  - travis_wait 20 sudo dieharder -a -f ./rand/sample.txt > ./output.txt
   - cat ./output.txt | grep WEAK | wc -l ; echo " WEAK TESTS "
 
 after_script:
