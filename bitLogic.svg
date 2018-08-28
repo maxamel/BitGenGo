@@ -1,0 +1,335 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewPort="-1 -1 750 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <style><![CDATA[
+    body,
+    html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #222;
+    }
+
+    svg {
+      position: absolute;
+      height: 400px;
+      width: 750px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: tan;
+    }
+
+    .source {
+      fill: #bfe8bf;
+      stroke: #353232;
+      stroke-width: 5px;
+    }
+
+    .bit-timer {
+      fill: none;
+      stroke: #36908a;
+      stroke-width: 6px;
+      stroke-dasharray: 298.3;
+      stroke-dashoffset: 298.3;
+    }
+
+    .dest-timer {
+      fill: none;
+      stroke: #82754a;
+      stroke-width: 6px;
+      stroke-dasharray: 311;
+      stroke-dashoffset: 311;
+    }
+
+    .wire {
+      fill: none;
+      stroke: #353232;
+      stroke-width: 5px;
+    }
+
+    .lit-wire {
+      fill: none;
+      stroke: #db5a5a;
+      stroke-width: 6px;
+      stroke-dasharray: 424;
+      stroke-dashoffset: 424;
+    }
+    #DTRwire.lit-wire {
+      stroke-dasharray: 80;
+      stroke-dashoffset: 80;
+    }
+
+    .destination {
+      fill: #e0ba39;
+      stroke: #353232;
+      stroke-width: 5px;
+    }
+
+    .text,
+    .source-to-destination {
+      text-anchor: middle;
+      font-family: Monospace;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .final.text {
+      text-anchor: start;
+      transition: all 0.5s ease;
+    }
+
+    .source-to-desitnation {
+      fill: #db5a5a;
+    }
+
+    .STDcircle {
+      fill: #db5a5a;
+      stroke: none;
+    }
+
+    .text:last-child {
+      text-anchor: start;
+    }
+
+    .tri {
+      fill: #db5a5a;
+      stroke: #db5a5a;
+      stroke-width: 5px;
+    }
+
+
+
+    ]]></style>
+    <!--ZERO-BIT-->
+      <circle class="source" cx="50" cy="50" r="47.5" />
+      <text class="text" x="50" y="57.5">0</text>
+      <path id="zero-timer" class="bit-timer" d="M50,50 m0,-47.5 a47.5,47.5 0,0 1 47.5,47.5 a47.5,47.5 0,0 1 -47.5,47.5 a47.5,47.5 0,0 1 -47.5,-47.5 a47.5,47.5 0,0 1 47.5,-47.5" />
+      <mask id="zeroSTDmask" x="0" y="0" width="750" height="400" maskUnits="userSpaceOnUse">
+        <rect width="750" height="400" fill="#fff"/>
+        <circle cx="50" cy="50" r="47.5" />
+        <path d="M400,200 v-25 a5,5 0,0 1 5,-5 h90 a5,5 0,0 1 5,5 v50 a5,5 0,0 1 -5,5 h-90 a5,5 0,0 1 -5,-5z" />
+      </mask>
+      <path class="wire" d="M100,50 h140 a10,10 0,0 1 10,10 v115 a10,10 0,0 0 10,10 h140" />
+      <path class="lit-wire" id="STDzerowire" d="M100,50 h140 a10,10 0,0 1 10,10 v115 a10,10 0,0 0 10,10 h140" />
+      <animate xlink:href="#STDzerowire" id="zeroSTDwireANIM"
+                   attributeName="stroke-dashoffset"
+                   from="424" to="0" dur="1s"
+                   begin="zero.end" />
+      <defs>
+        <path class="lit-wire" id="STDzerowireoffset" d="M150,50 h140 a10,10 0,0 1 10,10 v115 a10,10 0,0 0 10,10 h140" />
+      </defs>
+      <g class="source-to-destination hide" id="hideUnhideZero" mask="url(#zeroSTDmask)">
+        <circle class="STDcircle" id="STDzerocircle" cx="-50" cy="0" r="20">
+          <animateMotion id="zeroDelivered" dur="1s" begin="zero.end">
+            <mpath xlink:href="#STDzerowireoffset"/>
+          </animateMotion>
+        </circle>
+        <text id="STDzero" opacity="0" class="text" x="0" y="0" transform="translate(2,7.5)"><textPath id="pz" xlink:href="#STDzerowire" text-anchor="middle" startOffset="0" alignment-baseline="bottom">0</textPath></text>
+      </g>
+
+      <!--ONE-BIT-->
+      <circle class="source" cx="50" cy="350" r="47.5" />
+      <path id="one-timer" class="bit-timer" d="M50,350 m0,-47.5 a47.5,47.5 0,0 1 47.5,47.5 a47.5,47.5 0,0 1 -47.5,47.5 a47.5,47.5 0,0 1 -47.5,-47.5 a47.5,47.5 0,0 1 47.5,-47.5" />
+      <text class="text" x="50" y="357.5">1</text>
+      <animate xlink:href="#STDonewire" id="oneSTDwireANIM"
+                   attributeName="stroke-dashoffset"
+                   from="424" to="0" dur="1s"
+                   begin="one.end" />
+      <mask id="oneSTDmask" x="0" y="0" width="750" height="400" maskUnits="userSpaceOnUse">
+        <rect width="750" height="400" fill="#fff"/>
+        <circle cx="50" cy="350" r="47.5" />
+        <path d="M400,200 v-25 a5,5 0,0 1 5,-5 h90 a5,5 0,0 1 5,5 v50 a5,5 0,0 1 -5,5 h-90 a5,5 0,0 1 -5,-5z" />
+      </mask>
+      <path class="wire" d="M100,350 h140 a10,10 0,0 0 10,-10 v-115 a10,10 0,0 1 10,-10 h140" />
+      <path class="lit-wire" id="STDonewire" d="M100,350 h140 a10,10 0,0 0 10,-10 v-115 a10,10 0,0 1 10,-10 h140" />
+      <defs>
+        <path class="lit-wire" id="STDonewireoffset" d="M150,350 h140 a10,10 0,0 0 10,-10 v-115 a10,10 0,0 1 10,-10 h140" />
+      </defs>
+      <g class="source-to-destination hide" id="hideUnhideOne" mask="url(#oneSTDmask)">
+        <circle id="STDonecircle" class="STDcircle" cx="-50" cy="0" r="20">
+          <animateMotion id="oneDelivered" dur="1s" begin="one.end">
+            <mpath xlink:href="#STDonewireoffset"/>
+          </animateMotion>
+        </circle>
+        <text id="STDone" opacity="0" class="text" x="0" y="0" transform="translate(2,7.5)"><textPath id="po" xlink:href="#STDonewire" startOffset="0" text-anchor="middle" alignment-baseline="bottom">1</textPath></text>
+      </g>
+
+      <!--DESTINATION-->
+      <path class="destination" d="M400,200 v-25 a5,5 0,0 1 5,-5 h90 a5,5 0,0 1 5,5 v50 a5,5 0,0 1 -5,5 h-90 a5,5 0,0 1 -5,-5z" />
+      <mask id="flip-mask" x="0" y="0" width="750" height="400" maskUnits="userSpaceOnUse">
+        <rect width="750" height="400" fill="#000"/>
+        <rect x="440" y="190" width="20" height="20" fill="#fff"/>
+      </mask>
+          <rect x="440" y="190" width="20" height="20" fill="#fff"/>
+      <g mask="url(#flip-mask)">
+        <text id="flip-zero" class="text flips" x="450" y="227.5">0</text>
+        <animate xlink:href="#flip-zero"
+                 attributeName="y"
+                 from="227.5" to="207.5" dur="0.2s"
+                 fill="freeze"
+                 begin="zeroDelivered.end" />
+        <animate xlink:href="#flip-zero"
+                 attributeName="y"
+                 from="207.5" to="187.5" dur="0.2s"
+                 fill="freeze"
+                 begin="oneDelivered.end" />
+
+        <text id="flip-one" class="text flips" x="450" y="247.5">1</text>
+        <animate xlink:href="#flip-one"
+                 attributeName="y"
+                 from="227.5" to="207.5" dur="0.2s"
+                 fill="freeze"
+                 begin="oneDelivered.end" />
+        <animate xlink:href="#flip-one"
+                 attributeName="y"
+                 from="207.5" to="187.5" dur="0.2s"
+                 fill="freeze"
+                 begin="zeroDelivered.end" />
+      </g>
+      <path class="dest-timer" id="dest-timer" d="M450,170 h45 a5,5 0,0 1 5,5 v50 a5,5 0,0 1 -5,5 h-90 a5,5 0,0 1 -5,-5 v-50 a5,5 0,0 1 5,-5z" />
+
+      <!--RESULT-->
+      <path class="wire" d="M503,200 h80 v-10 l20,10 l-20,10 v-10" />
+      <path class="lit-wire" id="DTRwire" d="M503,200 h80" />
+      <defs>
+        <path id="resultPath" d="M503,200 h100" />
+      </defs>
+      <mask id="DTRmask" x="0" y="0" width="750" height="400" maskUnits="userSpaceOnUse">
+        <rect width="750" height="400" fill="#fff"/>
+        <path d="M400,200 v-25 a5,5 0,0 1 5,-5 h90 a5,5 0,0 1 5,5 v50 a5,5 0,0 1 -5,5 h-90 a5,5 0,0 1 -5,-5z" />
+      </mask>
+      <path id="pointer" class="wire" d="M583,200 v-10 l20,10 l-20,10 v-10" />
+      <g class="source-to-destination hide" id="lastMotion" mask="url(#DTRmask)">
+        <circle id="DTRcircle" class="STDcircle" cx="-20" cy="0" r="20">
+        </circle>
+        <text id="DTRnum" class="text" x="-20" y="0" transform="translate(0,7.5)"><textPath id="currNum" xlink:href="#resultPath" startOffset="0" text-anchor="middle" alignment-baseline="bottom">1</textPath></text>
+      </g>
+      <mask id="shift-mask" x="0" y="0" width="750" height="400" maskUnits="userSpaceOnUse">
+        <rect width="750" height="400" fill="#000"/>
+        <rect x="633" y="190" width="85.5" height="20" fill="#fff"/>
+      </mask>
+      <rect x="625" y="190" width="100" height="20" fill="#fff" />
+      <text mask="url(#shift-mask)" class="text final" id="finalResult" x="633" y="207.5" text-anchor="start"></text>
+  <script type="text/javascript"><![CDATA[
+    var result;
+    var svg = document.getElementsByTagName('svg')[0];
+    var resCircle = document.getElementById('DTRcircle');
+    var STDzero = document.getElementById('STDzero');
+    var STDzerocircle = document.getElementById('STDzerocircle');
+    var STDonecircle = document.getElementById('STDonecircle');
+    var DTRcircle = document.getElementById('DTRcircle');
+    var STDone = document.getElementById('STDone');
+    var lm = document.getElementById('lastMotion');
+    var tri = document.getElementById('pointer');
+    var currRes = document.getElementById('currNum');
+    var finalRes = document.getElementById('finalResult');
+    var currNum;
+    var transportedNUM;
+
+    function createAnimation(fnc, s, el, _id, attrName, href, begin, dur, from, to='0', repeatCount='1', listener='endEvent') {
+    	el.id = _id;
+    	el.setAttribute('attributeName', attrName);
+    	el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', href);
+    	el.setAttribute('begin', begin);
+    	el.setAttribute('dur', dur);
+    	el.setAttribute('from', from);
+      el.setAttribute('to', to);
+    	el.setAttribute('repeatCount', repeatCount);
+      s.appendChild(el);
+      el.addEventListener(listener, fnc, false);
+      return el;
+    }
+
+    function createMotion(fnc, s, el, _id, href, begin, dur, listener='endEvent') {
+    	el.id = _id;
+      var mpath = document.createElementNS("http://www.w3.org/2000/svg", "mpath");
+    	mpath.setAttributeNS('http://www.w3.org/1999/xlink', 'href', href);
+    	el.setAttribute('begin', begin);
+    	el.setAttribute('dur', dur);
+      el.appendChild(mpath);
+      s.appendChild(el);
+      el.addEventListener(listener, fnc, false);
+      return el;
+    }
+
+    //zero-timer
+    var zeroTimer = createAnimation(zeroTimerRepeat, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), 'zero', 'stroke-dashoffset', '#zero-timer', '0s;one.end', '1s', '300.3', '0', '1', 'endEvent');
+
+    //zero-source-to-destination-timer
+    var zeroSTDtimer = createAnimation(zeroSTDtimerRepeat, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), '', 'startOffset', '#pz', 'indefinite', '1s', '0', '424', '1', 'endEvent');
+
+    //one-timer
+    var oneTimer = createAnimation(oneTimerRepeat, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), 'one', 'stroke-dashoffset', '#one-timer', 'indefinite', '1s', '298.3', '0', '1', 'endEvent');
+
+    //one-source-to-destination-timer
+    var oneSTDtimer = createAnimation(oneSTDtimerRepeat, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), '', 'startOffset', '#po', 'indefinite', '1s', '0', '424', '1', 'endEvent');
+
+    //result timer
+    var resultTimer = createAnimation(resultTimerRepeat, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), 'resultTimer', 'stroke-dashoffset', '#dest-timer', '0s', '6s', '311', '0', 'indefinite', 'repeatEvent');
+
+    //destination-to-result-timer
+    var DTRtimer = createAnimation(DTRrepeat, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), 'DTRtimer', 'stroke-dashoffset', '#DTRwire', 'indefinite', '1.5s', '80', '0', '1', 'endEvent');
+
+    //last-motion
+    var lastMotion = createMotion(lastCircleMotion, resCircle, document.createElementNS("http://www.w3.org/2000/svg", "animateMotion"), 'resultDelivered', '#resultPath', 'indefinite', '1.5s');
+
+    //destination-to-result
+    var DTRnumMotion = createAnimation(resultReached, svg, document.createElementNS("http://www.w3.org/2000/svg", "animate"), '', 'startOffset', '#currNum', 'indefinite', '1.5s', '0', '100', '1', 'endEvent');
+
+    var flips = document.getElementsByClassName('flips');
+
+    function zeroTimerRepeat() {
+    	zeroSTDtimer.beginElement();
+      oneTimer.beginElement();
+    	STDone.setAttribute('x', '-50');
+      STDonecircle.setAttribute('opacity', '0');
+    	STDzero.setAttribute('x', '0');
+      STDzero.setAttribute('opacity', '1');
+      STDzerocircle.setAttribute('opacity', '1');
+    }
+
+    function zeroSTDtimerRepeat() {
+    	currNum = '0';
+    }
+
+    function oneTimerRepeat() {
+    	oneSTDtimer.beginElement();
+    	STDzero.setAttribute('x', '-50');
+      STDzerocircle.setAttribute('opacity', '0');
+      STDone.setAttribute('x', '0');
+      STDone.setAttribute('opacity', '1');
+      STDonecircle.setAttribute('opacity', '1');
+    }
+
+    function oneSTDtimerRepeat() {
+    	currNum = '1';
+    }
+
+    function resultTimerRepeat() {
+      var t = 5.5;
+      result = document.getElementById('resultTimer');
+      result.setAttribute('dur', t + 's');
+      currRes.textContent = currNum;
+      transportedNUM = currRes.textContent;
+      DTRtimer.beginElement();
+      lm.setAttribute('opacity', '1');
+      lastMotion.beginElement();
+      DTRnumMotion.beginElement();
+    }
+    function DTRrepeat() {
+      tri.setAttribute('class', 'tri');
+      setTimeout(function() {
+        tri.setAttribute('class', 'wire');
+      }, 500);
+    }
+    function lastCircleMotion() {
+      lm.setAttribute('opacity', '0');
+      lm.setAttribute('class', 'hide');
+    }
+    function resultReached() {
+      finalRes.textContent = transportedNUM + finalRes.textContent;
+    }
+
+    ]]></script>
+</svg>
